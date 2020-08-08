@@ -230,7 +230,7 @@ def changePassword(username, password):
     try:
         username = "'" + username + "'"
         password = "'" + password + "'"
-        query = " Update users set password = {} where email = {} ;".format(username, password)
+        query = " Update users set password = {} where email = {} ;".format(password, username)
         print(query)
         cur = mysql.connection.cursor()
         cur.execute(query)
