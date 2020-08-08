@@ -209,14 +209,41 @@ def change(token):
         if(request.method == "POST"):
             email = request.form['email']
             password = request.form['password']
-            status = db.changePassword(email, password)
-            flash(u" ----Password changed successfully---- ", 'alert alert-success')
-            return redirect("/login")
+            status = changePassword(email, password)
+            if status == True:
+                flash(u" ----Password changed successfully---- ", 'alert alert-success')
+                return redirect("/login")
+            else:
+                flash(u" ----We are facing some issue ---- ", 'alert alert-success')
+                return redirect("/login")
 
         else:
             return render_template("ChangePassowrd.html", email = email)
     except:
         return "something went wrong"
+
+def changePassword(username, password):
+    """
+        change password in database
+    """
+    status = False
+    try:
+        username = "'" + username + "'"
+        password = "'" + password + "'"
+        query = " Update users set password = {} where email = {} ;".format(username, password)
+        print(query)
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        mysql.connection.commit()
+        cur.close()
+        print("==========query executed=========")
+        status = True
+    except Exception as e:
+        print("----Exception is ----",e)
+        status = "Exception"
+
+    finally:
+        return status
 
 
 
