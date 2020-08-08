@@ -1,0 +1,36 @@
+{% extends 'layoutHome.html'%}
+
+{% block body%}
+<div class = "row">
+    <div class = "col-4 ">
+        <img src="{{url_for('static', filename='xpressxerox.PNG')}}" height="50%" width="50%" />
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <h4>People Registered</h4>
+                <span class="badge badge-primary badge-pill">{{users}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <h4>Documents in Queue</h4>
+                <span class="badge badge-primary badge-pill">{{doc}}</span>
+            </li>
+        </ul>
+        <h3> Site is under construction <br> <small class="text-muted"><strong>We will be soon there </strong> </small> </h3>
+
+    </div>
+
+    <div class = "col-8">
+        <div class="jumbotron text-center">
+            <p class="lead">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><h3> Cloud Platform <small class="text-muted">Upload documet form anywhere</small> </h3></li>
+                  <li class="list-group-item"><h3> PDF Files <small class="text-muted">Upload PDF files only</small> </li>
+                  <li class="list-group-item"><h3> Online Payment <small class="text-muted">Pay online bill</small> </li>
+                  <li class="list-group-item"><h3> No Q <small class="text-muted">Just visit center and collect documents</small> </li>
+                  <li class="list-group-item"><h3> Privacy <small class="text-muted">Noone can see your document</small> </li>
+                </ul>
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% extends 'layout.html'%}
+
+{% block body%}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Status</title>
+</head>
+<body>
+    <div class = "container">
+        <h1><a href = "http://xpressxerox.pythonanywhere.com/user">Click Here to Print Documents</a></h1>
+        <!--<h1>{{response_dict}}</h1>-->
+        <table class="table table-dark">
+             <tbody>
+                <tr>
+                  <th scope="row">ORDER ID</th>
+                  <td>{{ response_dict['ORDERID'] }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">STATUS</th>
+                  <td>{{ response_dict['RESPMSG'] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+
+{% endblock%}
