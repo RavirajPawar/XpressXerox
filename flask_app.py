@@ -10,8 +10,6 @@ from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from flask_mysqldb import MySQL
 
-app = Flask(__name__)
-
 UPLOAD_FOLDER = r'Uploaded Documnet//'
 ALLOWED_EXTENSIONS = {'pdf'}
 csrf = CSRFProtect()
@@ -19,23 +17,8 @@ now = strftime("-%Y%m%d-%H%M%S", gmtime())
 MERCHANT_KEY = 'lQ5Ypdx5uSdqNsfS'
 URL  = URLSafeTimedSerializer("Secreat_key_for_temp_URL")
 
-#Normal Configurtion
-app.secret_key = "raviraj+Amir+both+developed"
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-#Mail Server configuration
-app.config['MAIL_SERVER']='smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'xpressxeroxx@gmail.com'
-app.config['MAIL_PASSWORD'] = 'AmirAdmin'
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-
-#Database configuration
-app.config['MYSQL_HOST'] = 'xpressxerox.mysql.pythonanywhere-services.com'
-app.config['MYSQL_USER'] = 'xpressxerox'
-app.config['MYSQL_PASSWORD'] = 'rootroot'
-app.config['MYSQL_DB'] = 'xpressxerox$Amir'
+app = Flask(__name__)
+app.config.from_object("config.ProductionConfig")
 
 mail = Mail(app)
 mysql = MySQL(app)
@@ -391,7 +374,6 @@ def adminAction():
 
 
 if __name__ == "__main__":
-    app.debug = True
     app.run()
 
 
