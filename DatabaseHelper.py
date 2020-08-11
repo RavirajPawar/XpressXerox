@@ -4,12 +4,6 @@ from PyPDF2 import PdfFileReader
 from openpyxl import Workbook, load_workbook
 
 
-# # database connection
-# conn = pymysql.connect(host = 'xpressxerox.mysql.pythonanywhere-services.com', user = 'xpressxerox', password = 'rootroot', database = 'xpressxerox$Amir')
-# cursor = conn.cursor()
-
-# print("------------------------------------database  connected ------------------------------------")
-
 NoneType = type(None)
 UPLOAD_FOLDER = r'Uploaded Documnet'
 
