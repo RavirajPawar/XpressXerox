@@ -18,7 +18,7 @@ MERCHANT_KEY = 'lQ5Ypdx5uSdqNsfS'
 URL  = URLSafeTimedSerializer("Secreat_key_for_temp_URL")
 
 app = Flask(__name__)
-app.config.from_object("config.ProductionConfig")
+app.config.from_object("Config.ProductionConfig")
 
 mail = Mail(app)
 mysql = MySQL(app)
