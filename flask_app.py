@@ -13,7 +13,6 @@ from flask_mysqldb import MySQL
 UPLOAD_FOLDER = r'Uploaded Documnet//'
 ALLOWED_EXTENSIONS = {'pdf'}
 csrf = CSRFProtect()
-now = strftime("-%Y%m%d-%H%M%S", gmtime())
 MERCHANT_KEY = 'lQ5Ypdx5uSdqNsfS'
 URL  = URLSafeTimedSerializer("Secreat_key_for_temp_URL")
 
@@ -22,6 +21,9 @@ app.config.from_object("Config.ProductionConfig")
 
 mail = Mail(app)
 mysql = MySQL(app)
+
+def Current_Time():
+    return str(strftime("-%Y%m%d-%H%M%S", gmtime()))
 
 def TotalUsers():
     """
@@ -275,10 +277,14 @@ def user():
                 session["bill"] += amount
             print("final bill----- ", session["bill"])
             data_dict = {'MID': 'VeMuWi85833969814381', 'TXN_AMOUNT': str(session["bill"]),
-                         'ORDER_ID': session["username"] + now, 'CUST_ID': session["username"],
+                         'ORDER_ID': session["username"] + Current_Time(), 'CUST_ID': session["username"],
                          'INDUSTRY_TYPE_ID': 'Retail', 'WEBSITE': 'worldpressplg', 'CHANNEL_ID': 'WEB',
                          'CALLBACK_URL': 'http://xpressxerox.pythonanywhere.com/handleRequest' }
             data_dict["CHECKSUMHASH"] = Checksum.generate_checksum(data_dict, MERCHANT_KEY)
+
+            print("----COMPLETE data_dict DICT----")
+            for key in data_dict:
+                print(key, "-----" ,data_dict[key])
 
             return render_template("PayTm.html", data_dict=data_dict)
         else:
@@ -301,6 +307,9 @@ def handleRequest():
     if verify:
         if response_dict["RESPCODE"] == "01":
             print("Money Transfered")
+            print("----COMPLETE RESPONSE DICT----")
+            for key in response_dict:
+                print(key, "-----" ,response_dict[key])
             return render_template("Status.html", response_dict = response_dict, user = session["username"])
         else:
             files = db.fileUploded(UPLOAD_FOLDER + session["username"].split("@")[0])
@@ -313,7 +322,9 @@ def handleRequest():
                     print("file path ",UPLOAD_FOLDER + session["username"].split("@")[0] + file)
                     os.remove(UPLOAD_FOLDER + session["username"].split("@")[0] + "//" + file)
                     print("file removed")
-            print("Problem during transaction ", response_dict["RESPMSG"])
+            print("----COMPLETE RESPONSE DICT----")
+            for key in response_dict:
+                print(key, "-----" ,response_dict[key])
             return render_template("Status.html", response_dict = response_dict, user = session["username"])
 
 
@@ -323,8 +334,7 @@ def action():
     if ((session["username"] != "amirkanai01@gmail.com") and isUser(session["username"]) and request.args.get("act") != None):
         status = request.args.get("act")
         file = request.args.get("doc")
-        now = strftime("-%Y%m%d-%H%M%S", gmtime())
-        temp = session["username"].split("@")[0] + str(now) + "." + file.split(".")[-1]
+        temp = session["username"].split("@")[0] + Current_Time() + "." + file.split(".")[-1]
         if status == "print":
             shutil.move(UPLOAD_FOLDER + session["username"].split("@")[0] + "//" + file , UPLOAD_FOLDER + 'amirkanai01//' + temp)
             return redirect("/user")
