@@ -242,7 +242,7 @@ def allowed_file(filename):
 
 @app.route('/user', methods=['GET', 'POST'])
 def user():
-    session["bill"] = 0
+
     if ((session["username"] != "amirkanai01@gmail.com") and isUser(session["username"])):
 
         files = db.fileUploded(UPLOAD_FOLDER + session["username"].split("@")[0] )
@@ -264,18 +264,20 @@ def user():
                 else:
                     flash('WE ACCEPT PDF FILES ONLY', "alert alert-danger")
                     return redirect('/user')
-            session["temp_file"] = []
+
             for file in files_uploaded:
+                session["bill"] = 0
+                session["temp_file"] = []
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(UPLOAD_FOLDER  + session["username"].split("@")[0] + "//", filename))
                 session["temp_file"].append(filename)
                 amount = db.pageCounter(UPLOAD_FOLDER  + session["username"].split("@")[0] + "//" + filename)
                 session["bill"] += amount
             print("final bill----- ", session["bill"])
-            data_dict = {'MID': 'VeMuWi85833969814381', 'TXN_AMOUNT': str(session["bill"]), 'ORDER_ID': session["username"] + now,
-                         'CUST_ID': session["username"], 'INDUSTRY_TYPE_ID': 'Retail', 'WEBSITE': 'worldpressplg',
-                         'CHANNEL_ID': 'WEB',
-                         'CALLBACK_URL': 'http://xpressxerox.pythonanywhere.com/handleRequest', }
+            data_dict = {'MID': 'VeMuWi85833969814381', 'TXN_AMOUNT': str(session["bill"]),
+                         'ORDER_ID': session["username"] + now, 'CUST_ID': session["username"],
+                         'INDUSTRY_TYPE_ID': 'Retail', 'WEBSITE': 'worldpressplg', 'CHANNEL_ID': 'WEB',
+                         'CALLBACK_URL': 'http://xpressxerox.pythonanywhere.com/handleRequest' }
             data_dict["CHECKSUMHASH"] = Checksum.generate_checksum(data_dict, MERCHANT_KEY)
 
             return render_template("PayTm.html", data_dict=data_dict)
@@ -290,6 +292,7 @@ def user():
 def handleRequest():
     form = request.form
     response_dict = dict()
+    checksum = ""
     for i in form.keys():
         response_dict[i] = form[i]
         if i == "CHECKSUMHASH":
@@ -298,6 +301,7 @@ def handleRequest():
     if verify:
         if response_dict["RESPCODE"] == "01":
             print("Money Transfered")
+            return render_template("Status.html", response_dict = response_dict, user = session["username"])
         else:
             files = db.fileUploded(UPLOAD_FOLDER + session["username"].split("@")[0])
             print("files after  uploading handle request ------", files)
@@ -305,14 +309,13 @@ def handleRequest():
             for file in session["temp_file"]:
                 # filename = file.filename
                 # filename = filename.replace(" ","_")
-                print(file,  "condition ", file in files)
                 if file in files:
                     print("file path ",UPLOAD_FOLDER + session["username"].split("@")[0] + file)
                     os.remove(UPLOAD_FOLDER + session["username"].split("@")[0] + "//" + file)
                     print("file removed")
             print("Problem during transaction ", response_dict["RESPMSG"])
+            return render_template("Status.html", response_dict = response_dict, user = session["username"])
 
-    return render_template("Status.html", response_dict=response_dict, user = session["username"])
 
 
 @app.route('/action', methods=['POST', 'GET'])

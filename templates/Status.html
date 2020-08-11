@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class = "container">
-        <h1><a href = "http://xpressxerox.pythonanywhere.com/user">Click Here to Print Documents</a></h1>
+        <h1><a href = "http://xpressxerox.pythonanywhere.com/user">Go to your Dashboard</a></h1>
         <!--<h1>{{response_dict}}</h1>-->
         <table class="table table-dark">
              <tbody>
@@ -24,6 +24,16 @@
                 </tr>
             </tbody>
         </table>
+
+        <hr>
+        <h3> Printing whole response from </h3>
+
+        {% for i in response_dict%}
+            <tr>
+                <th scope="row">{{i}}</th>
+                <td>{{response_dict[i]}}</td>
+            </tr>
+        {% endfor%}
     </div>
 </body>
 </html>
