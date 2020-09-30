@@ -13,7 +13,7 @@ from flask_mysqldb import MySQL
 UPLOAD_FOLDER = r'Uploaded Documnet//'
 ALLOWED_EXTENSIONS = {'pdf'}
 csrf = CSRFProtect()
-MERCHANT_KEY = 'lQ5Ypdx5uSdqNsfS'
+MERCHANT_KEY = 'ENTER YOUR PAYTM KEY'
 URL  = URLSafeTimedSerializer("Secreat_key_for_temp_URL")
 
 app = Flask(__name__)
@@ -276,7 +276,7 @@ def user():
                 amount = db.pageCounter(UPLOAD_FOLDER  + session["username"].split("@")[0] + "//" + filename)
                 session["bill"] += amount
             print("final bill----- ", session["bill"])
-            data_dict = {'MID': 'VeMuWi85833969814381', 'TXN_AMOUNT': str(session["bill"]),
+            data_dict = {'MID': 'YOUR PAYTM KEY', 'TXN_AMOUNT': str(session["bill"]),
                          'ORDER_ID': session["username"] + Current_Time(), 'CUST_ID': session["username"],
                          'INDUSTRY_TYPE_ID': 'Retail', 'WEBSITE': 'worldpressplg', 'CHANNEL_ID': 'WEB',
                          'CALLBACK_URL': 'http://xpressxerox.pythonanywhere.com/handleRequest' }
